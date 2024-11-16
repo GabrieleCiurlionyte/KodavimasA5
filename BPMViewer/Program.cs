@@ -4,127 +4,89 @@ namespace BMPViewer
 {
     public partial class MainForm : Form
     {
-        private PictureBox pictureBoxOriginalImage;
-        private PictureBox pictureBoxNotEncodedImage;
-        private PictureBox pictureBoxEncodedImage;
-
-        private TextBox inputPath;
-        private Button loadButton;
-
+        private UIHelper uiHelper;
         private Image originalImage;
 
         public MainForm()
         {
-            InitializeUI();
+            uiHelper = new UIHelper(this);
+            uiHelper.LoadButton.Click += LoadButton_Click; // Attach event to LoadButton
         }
 
-        private void InitializeUI()
+        private async void LoadButton_Click(object sender, EventArgs e)
         {
-            this.Text = "BMP Image Viewer";
-            this.Size = new Size(1200, 500); // Increase form width to accommodate both images
-
-            inputPath = new TextBox { Left = 20, Top = 20, Width = 800 };
-            loadButton = new Button { Text = "Load BMP", Left = 830, Top = 18, Width = 100 };
-            loadButton.Click += LoadButton_Click;
-
-            // Original Image PictureBox
-            pictureBoxOriginalImage = new PictureBox
-            {
-                Left = 20,
-                Top = 60,
-                Width = 540,
-                Height = 360,
-                BorderStyle = BorderStyle.FixedSingle,
-                SizeMode = PictureBoxSizeMode.Zoom
-            };
-
-            // Displayed Image PictureBox
-            pictureBoxNotEncodedImage = new PictureBox
-            {
-                Left = 600, // Positioned beside the original image PictureBox
-                Top = 60,
-                Width = 540,
-                Height = 360,
-                BorderStyle = BorderStyle.FixedSingle,
-                SizeMode = PictureBoxSizeMode.Zoom
-            };
-
-            // Encoded Image PictureBox
-            pictureBoxEncodedImage = new PictureBox
-            {
-                Left = 1180, // Positioned beside the not encoded image PictureBox
-                Top = 60,
-                Width = 540,
-                Height = 360,
-                BorderStyle = BorderStyle.FixedSingle,
-                SizeMode = PictureBoxSizeMode.Zoom
-            };
-
-            // Add controls to the form
-            Controls.Add(inputPath);
-            Controls.Add(loadButton);
-            Controls.Add(pictureBoxOriginalImage);
-            Controls.Add(pictureBoxNotEncodedImage);
-        }
-
-        private void LoadButton_Click(object sender, EventArgs e)
-        {
-            string filePathInput = inputPath.Text.Trim();
+            string filePathInput = uiHelper.InputPath.Text.Trim();
             var filePath = PathHelper.GetProjectPath(filePathInput);
 
-            //TODO: change hardcoded values
             int m = 3;
-            int percentageOfMistake = 25;
+            int percentageOfMistake = 5;
 
             if (filePath != null)
             {
                 try
                 {
+                    // Disable the Load Button while loading
+                    uiHelper.LoadButton.Enabled = false;
+
                     ShowOriginalImage(filePath, m);
-                    ShowNotEncodedImage(m, percentageOfMistake);
-                    ShowEncodedImage(m, percentageOfMistake);
+                    await ShowNotEncodedImageAsync(m, percentageOfMistake);
+                    await ShowEncodedImageAsync(m, percentageOfMistake);
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show($"An error occurred while loading the image: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+                finally
+                {
+                    // Enable the Load Button after processing
+                    uiHelper.LoadButton.Enabled = true;
+                }
             }
         }
 
-        private void ShowOriginalImage(string filePath, int m) {
+        private void ShowOriginalImage(string filePath, int m)
+        {
             Image image = Image.FromFile(filePath);
 
             if (!ImageHelper.isImageLengthValid(image, m))
             {
                 return;
             }
-            // Display the original image in the first PictureBox
-            pictureBoxOriginalImage.Image = image;
+            uiHelper.PictureBoxOriginalImage.Image = image;
             originalImage = image;
         }
 
-        private void ShowNotEncodedImage(int m, int percentageOfMistake) {
-            var notEncodedImage = ScenarioHelper.SendImageWithoutEncoding(originalImage, m, percentageOfMistake);
+        private async Task ShowNotEncodedImageAsync(int m, int percentageOfMistake)
+        {
+            uiHelper.PictureBoxNotEncodedImage.Image = uiHelper.CreateLoadingImage(uiHelper.PictureBoxNotEncodedImage.Width, uiHelper.PictureBoxNotEncodedImage.Height);
+            uiHelper.PictureBoxNotEncodedImage.Refresh();
+
+            var notEncodedImage = await Task.Run(() => ScenarioHelper.SendImageWithoutEncoding(originalImage, m, percentageOfMistake));
+
             if (notEncodedImage == null)
             {
-                MessageBox.Show($"Could not send not encoded image", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Could not send not encoded image", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
-                pictureBoxNotEncodedImage.Image = notEncodedImage;
+                uiHelper.PictureBoxNotEncodedImage.Image = notEncodedImage;
             }
         }
 
-        private void ShowEncodedImage(int m, int percentageOfMistake)
+        private async Task ShowEncodedImageAsync(int m, int percentageOfMistake)
         {
-            var encodedImage = ScenarioHelper.SendImageWithEncoding(originalImage, m, percentageOfMistake); // Assuming you have this method
+            uiHelper.PictureBoxEncodedImage.Image = uiHelper.CreateLoadingImage(uiHelper.PictureBoxEncodedImage.Width, uiHelper.PictureBoxEncodedImage.Height);
+            uiHelper.PictureBoxEncodedImage.Refresh();
+
+            var encodedImage = await Task.Run(() => ScenarioHelper.SendImageWithEncoding(originalImage, m, percentageOfMistake));
+
             if (encodedImage == null)
             {
                 MessageBox.Show("Could not send encoded image", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
-                pictureBoxEncodedImage.Image = encodedImage;
+                uiHelper.PictureBoxEncodedImage.Image = encodedImage;
             }
         }
 

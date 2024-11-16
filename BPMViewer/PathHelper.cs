@@ -32,7 +32,7 @@
             string baseDir = AppDomain.CurrentDomain.BaseDirectory;
 
             // Traverse up three levels to get to the project folder
-            string projectDir = Path.GetFullPath(Path.Combine(baseDir, @"..\..\..\"));
+            string projectDir = Path.GetFullPath(Path.Combine(baseDir, @"..\..\..\Photos"));
             return projectDir;
         }
     }

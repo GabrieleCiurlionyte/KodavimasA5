@@ -16,4 +16,8 @@
     <ProjectReference Include="..\KodavimasA5\KodavimasA5.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Photos\" />
+  </ItemGroup>
+
 </Project>

@@ -15,14 +15,18 @@ namespace KodavimasA5
 
             StringBuilder binaryBuilder = new StringBuilder();
 
-            foreach (var chunk in listOfChunks) 
+            var results = new string[listOfChunks.Count];
+            Parallel.ForEach(listOfChunks, (chunk, state, index) =>
             {
                 var intChunk = ConversionHelper.ConvertStringToIntArray(chunk);
                 var intResult = MathHelper.MultiplyMatrixWithOneDimensionArray(generativeMatrix, intChunk);
                 var encodedResult = ConversionHelper.ConvertIntArrayToBinaryStringArray(intResult);
-                binaryBuilder.Append(string.Join("", encodedResult));
-            }
-            return binaryBuilder.ToString();
+
+                results[index] = string.Join("", encodedResult); // Store result at the correct index
+            });
+
+            // Concatenate the ordered results
+            return string.Concat(results);
 
 
         }

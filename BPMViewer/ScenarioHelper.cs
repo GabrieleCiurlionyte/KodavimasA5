@@ -21,24 +21,27 @@ namespace BPMViewer
             return imageReceivedFromChannel;
         }
 
-        public static Image? SendImageWithEncoding(Image imageInput, int m, int percentageOfMistake) 
+        public static Image? SendImageWithEncoding(Image imageInput, int m, int percentageOfMistake)
         {
-            //Convert image to binary
+
             var binaryString = ImageHelper.ConvertImageToBinary(imageInput);
 
-            //Encode
-            var encodedBinaryString = Encoder.Encode(binaryString, m);
+            // Extract and retain header data
+            var header = binaryString.Substring(0, _bmpHeaderSize * 8); // Assuming 8 bits per byte for header
+            var imageData = binaryString.Substring(_bmpHeaderSize * 8);
 
-            //Sending through channel
-            var channelOutputWithEncoding = Channel.SendThroughChannel(binaryString, percentageOfMistake, _bmpHeaderSize);
+            // Encode only the image data
+            var encodedBinaryString = Encoder.Encode(imageData, m);
 
-            //Decode
+            var channelOutputWithEncoding = Channel.SendThroughChannel(encodedBinaryString, percentageOfMistake, _bmpHeaderSize);
+
+            // Decode the received data
             var decodedBinaryInput = Decoder.Decode(channelOutputWithEncoding, m);
 
-            //Converting binary back to string
-            var imageReceivedFromChannel = ImageHelper.ConvertBinaryToImage(decodedBinaryInput);
+            // Reassemble the binary string with the original header
+            var completeBinaryString = header + decodedBinaryInput;
 
-            return imageReceivedFromChannel;
+            return ImageHelper.ConvertBinaryToImage(completeBinaryString);
         }
     }
 }
