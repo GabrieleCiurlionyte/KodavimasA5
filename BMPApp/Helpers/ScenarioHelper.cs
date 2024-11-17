@@ -5,6 +5,7 @@ namespace BMPApp.Helpers
     public static class ScenarioHelper
     {
         private static int _bmpHeaderSize = 54;
+        private static Random _random = new Random();
 
         public static Image? SendImageWithoutEncoding(Image imageInput, int m, int percentageOfMistake)
         {
@@ -35,7 +36,7 @@ namespace BMPApp.Helpers
             var channelOutputWithEncoding = Channel.SendThroughChannel(encodedBinaryString, percentageOfMistake, _bmpHeaderSize);
 
             // Decode the received data
-            var decodedBinaryInput = Decoder.Decode(channelOutputWithEncoding, m);
+            var decodedBinaryInput = Decoder.Decode(_random, channelOutputWithEncoding, m);
 
             // Reassemble the binary string with the original header
             var completeBinaryString = header + decodedBinaryInput;

@@ -5,7 +5,9 @@ VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KodavimasA5", "KodavimasA5\KodavimasA5.csproj", "{70979E67-F91F-4D25-8DA2-3182AAF8961B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMPApp", "BMPApp\BMPApp.csproj", "{094763E4-9334-46D8-8B57-3C8B5804202B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BMPApp", "BMPApp\BMPApp.csproj", "{094763E4-9334-46D8-8B57-3C8B5804202B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{4BB20B45-619E-4367-8A02-CFDFBF2D0A19}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{094763E4-9334-46D8-8B57-3C8B5804202B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{094763E4-9334-46D8-8B57-3C8B5804202B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{094763E4-9334-46D8-8B57-3C8B5804202B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BB20B45-619E-4367-8A02-CFDFBF2D0A19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BB20B45-619E-4367-8A02-CFDFBF2D0A19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BB20B45-619E-4367-8A02-CFDFBF2D0A19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BB20B45-619E-4367-8A02-CFDFBF2D0A19}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

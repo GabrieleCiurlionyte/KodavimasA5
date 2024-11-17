@@ -5,36 +5,35 @@ namespace KodavimasA5;
 
 public static class Decoder
 {
-    public static string Decode(string w, int m)
+    public static string Decode(Random random, string w, int m)
     {
-        // Determine chunk size for Reed-Muller decoding
+
+        //First we have to separate into chunks of size 2^m
         var chunkSize = GenerativeMatrixConstructor.GetReedMullerCodeLength(m);
+
         var listOfChunks = StringHelper.SplitStringIntoChunks(w, chunkSize);
 
-        // Pre-allocate an array to store decoded results in order
-        var decodedChunks = new string[listOfChunks.Count];
+        StringBuilder binaryBuilder = new StringBuilder();
 
-        // Process each chunk in parallel
-        Parallel.ForEach(listOfChunks, (chunk, state, index) =>
+        foreach (var chunk in listOfChunks)
         {
             var intArray = ConversionHelper.ConvertStringToIntArray(chunk);
 
-            // 2nd step of Fast decoding for RM(1,m) algorithm
+            //2nd step of Fast decoding for RM(1,m) algorithm
             var computeLargestW = ComputeLargestW(m, intArray);
 
-            // 3rd step of Fast decoding for RM(1,m) algorithm
-            var largestComponentIndex = FindIndexOfTheLargestComponentInW(computeLargestW);
+            //3rd step of Fast decoding for RM(1,m) algorithm
+            var index = FindIndexOfTheLargestComponentInW(computeLargestW);
 
-            // Find binary representation of index
-            var binaryIndex = ConversionHelper.ConvertIndexToBinaryStringRepresentation(largestComponentIndex, m);
+            //Find binary representation of j
+            var binaryIndex = ConversionHelper.ConvertIndexToBinaryStringRepresentation(index, m);
 
-            // Get decoded message based on the sign of the largest component
-            var decodedChunk = GetDecodedMessage(binaryIndex, computeLargestW[largestComponentIndex] > 0);
+            var decodedChunk = GetDecodedMessage(binaryIndex, computeLargestW[index] > 0);
 
-            decodedChunks[index] = decodedChunk;
-        });
+            binaryBuilder.Append(decodedChunk);
+        }
 
-        return string.Concat(decodedChunks);
+        return binaryBuilder.ToString();
     }
 
     private static string GetDecodedMessage(string indexBinaryString, bool largestWIsPositive)

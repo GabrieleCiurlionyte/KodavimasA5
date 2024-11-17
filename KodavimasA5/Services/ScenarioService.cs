@@ -5,6 +5,12 @@ namespace KodavimasA5.Services
 {
     public class ScenarioService
     {
+        private static Random _random;
+        public ScenarioService(Random random)
+        {
+            _random = random;
+        }
+
         public void ExecuteFirstScenario(int m, int percentageOfMistake) 
         {
             var binaryVector = ConsoleWriteHelper.EnterBinaryVector(m);
@@ -13,7 +19,7 @@ namespace KodavimasA5.Services
             string channelVector = Channel.SendThroughChannel(encodedVector, percentageOfMistake);
             ConsoleWriteHelper.PrintBinaryVectorMistakes(encodedVector, channelVector);
             ConsoleWriteHelper.FixBinaryVectorMistakes(encodedVector, channelVector);
-            var decodedVector = Decoder.Decode(channelVector, m);
+            var decodedVector = Decoder.Decode(_random, channelVector, m);
             Console.WriteLine("Decoded vector:\n" + decodedVector);
         }
 
@@ -33,7 +39,6 @@ namespace KodavimasA5.Services
             var input = ConsoleWriteHelper.InputUserText();
             if (!ValidatorHelper.IsStringVectorLengthCorrect(input, m))
             {
-                // TODO: write why incorrect
                 Console.WriteLine("The input is not correct length");
                 return null;
             }
@@ -67,7 +72,7 @@ namespace KodavimasA5.Services
 
             var encodedVector = Encoder.Encode(binaryInput, m);
             var channelInputWithEncoding = Channel.SendThroughChannel(encodedVector, percentageOfMistake);
-            var decodedVector = Decoder.Decode(channelInputWithEncoding, m);
+            var decodedVector = Decoder.Decode(_random, channelInputWithEncoding, m);
             var decodedString = ConversionHelper.ConvertBinaryToString(decodedVector);
 
             Console.WriteLine("Result with encoding");

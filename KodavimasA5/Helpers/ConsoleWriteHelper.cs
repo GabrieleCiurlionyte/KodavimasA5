@@ -38,11 +38,11 @@ namespace KodavimasA5.Helpers
             return int.Parse(input);
         }
 
-        public static void StartCodingTask() 
+        public static void StartCodingTask(Random random) 
         {
             int scenarioNumber = EnterScenarioNumber();
 
-            var scenarioService = new ScenarioService();
+            var scenarioService = new ScenarioService(random);
             StartScenario(scenarioService, scenarioNumber);
         }
 
