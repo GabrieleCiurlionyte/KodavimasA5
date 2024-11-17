@@ -1,7 +1,6 @@
 ﻿using KodavimasA5.Helpers;
-using System.Text;
 
-namespace BPMViewer
+namespace BMPApp.Helpers
 {
     public static class ImageHelper
     {
@@ -42,7 +41,7 @@ namespace BPMViewer
             }
         }
 
-        public static bool isImageLengthValid(Image image, int m) 
+        public static bool isImageLengthValid(Image image, int m)
         {
             var binaryVector = ConvertImageToBinary(image);
 

@@ -1,13 +1,12 @@
 ﻿using KodavimasA5;
-using KodavimasA5.Helpers;
 
-namespace BPMViewer
+namespace BMPApp.Helpers
 {
     public static class ScenarioHelper
     {
         private static int _bmpHeaderSize = 54;
 
-        public static Image? SendImageWithoutEncoding(Image imageInput, int m, int percentageOfMistake) 
+        public static Image? SendImageWithoutEncoding(Image imageInput, int m, int percentageOfMistake)
         {
             //Convert image to binary
             var binaryString = ImageHelper.ConvertImageToBinary(imageInput);

@@ -1,25 +1,27 @@
-using BPMViewer;
+using BMPApp.Helpers;
 
-namespace BMPViewer
+namespace BMPApp
 {
     public partial class MainForm : Form
     {
         private UIHelper uiHelper;
         private Image originalImage;
+        public int m;
+        public int percentageOfMistake;
 
-        public MainForm()
+        public MainForm(int m, int percentageOfMistake)
         {
+            this.m = m;
+            this.percentageOfMistake = percentageOfMistake;
+
             uiHelper = new UIHelper(this);
-            uiHelper.LoadButton.Click += LoadButton_Click; // Attach event to LoadButton
+            uiHelper.LoadButton.Click += LoadButton_Click;
         }
 
         private async void LoadButton_Click(object sender, EventArgs e)
         {
             string filePathInput = uiHelper.InputPath.Text.Trim();
             var filePath = PathHelper.GetProjectPath(filePathInput);
-
-            int m = 3;
-            int percentageOfMistake = 5;
 
             if (filePath != null)
             {
@@ -91,11 +93,22 @@ namespace BMPViewer
         }
 
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+
+            int m = 3; // Default values
+            int percentageOfMistake = 5;
+
+            // Parse command-line arguments if provided
+            if (args.Length >= 2)
+            {
+                int.TryParse(args[0], out m);
+                int.TryParse(args[1], out percentageOfMistake);
+            }
+
+            Application.Run(new MainForm(m, percentageOfMistake));
         }
     }
 }

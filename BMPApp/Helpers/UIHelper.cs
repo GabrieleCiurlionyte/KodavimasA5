@@ -1,4 +1,4 @@
-﻿namespace BMPViewer
+﻿namespace BMPApp.Helpers
 {
     public class UIHelper
     {
@@ -16,6 +16,9 @@
         private Label labelNotEncodedImage;
         private Label labelEncodedImage;
 
+        private Label labelMValue;
+        private Label labelPercentageOfMistakeValue;
+
         public UIHelper(Form form)
         {
             mainForm = form;
@@ -30,6 +33,22 @@
 
             InputPath = new TextBox { Left = 20, Top = 20, Width = 800 };
             LoadButton = new Button { Text = "Load BMP", Left = 830, Top = 18, Width = 100 };
+
+            labelMValue = new Label
+            {
+                Text = $"m: {((MainForm)mainForm).m}",
+                AutoSize = true,
+                Top = LoadButton.Top,      
+                Left = LoadButton.Right + 20
+            };
+
+            labelPercentageOfMistakeValue = new Label
+            {
+                Text = $"Percentage of Mistake: {((MainForm)mainForm).percentageOfMistake}",
+                AutoSize = true,
+                Top = LoadButton.Top,    
+                Left = labelMValue.Right + 20
+            };
 
             int spacing = 20;
             int pictureBoxWidth = (mainForm.ClientSize.Width - 4 * spacing) / 3;
@@ -98,6 +117,8 @@
             // Add controls to the form
             mainForm.Controls.Add(InputPath);
             mainForm.Controls.Add(LoadButton);
+            mainForm.Controls.Add(labelMValue);
+            mainForm.Controls.Add(labelPercentageOfMistakeValue);
             mainForm.Controls.Add(labelOriginalImage);
             mainForm.Controls.Add(PictureBoxOriginalImage);
             mainForm.Controls.Add(labelNotEncodedImage);

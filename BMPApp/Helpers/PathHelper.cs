@@ -1,9 +1,10 @@
-﻿namespace BPMViewer
+﻿namespace BMPApp.Helpers
 {
     public static class PathHelper
     {
-        
-        public static string? GetProjectPath(string filePath) {
+
+        public static string? GetProjectPath(string filePath)
+        {
 
             if (!Path.IsPathRooted(filePath))
             {

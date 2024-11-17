@@ -1,4 +1,5 @@
 ﻿using KodavimasA5.Helpers;
+using System.Diagnostics;
 
 namespace KodavimasA5.Services
 {
@@ -75,7 +76,25 @@ namespace KodavimasA5.Services
 
         public void ExecuteThirdScenario(int m, int percentageOfMistake)
         {
-            throw new NotImplementedException();
+
+            //TODO: change to relative path
+
+            // Specify the full path to BMPApp.exe
+            string fullPath = @"C:\Users\gabrc\source\repos\KodavimasA5\BMPApp\bin\Debug\net8.0-windows\BMPApp.exe";
+
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                FileName = fullPath,
+                Arguments = $"{m} {percentageOfMistake}",
+                UseShellExecute = true              
+            };
+
+            using (Process process = Process.Start(startInfo))
+            {
+                // Wait for the process to exit
+                Console.WriteLine("Close the BMP Image Viewer window, to return to new scenario selection");
+                process.WaitForExit();
+            }
         }
     }
 }
