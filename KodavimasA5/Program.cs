@@ -5,6 +5,7 @@ ConsoleWriteHelper.StartCodingTask();
 string input;
 bool isUserContinuing = true;
 
+do
 {
     Console.WriteLine("Do you want to try again a new scenario?");
     Console.WriteLine("If yes: type 'y', if no: type 'n'");
@@ -23,8 +24,8 @@ bool isUserContinuing = true;
     }
     else
     {
-        Console.WriteLine("Invalid input. Please enter 'Y' or 'N'.");
+        Console.WriteLine("Invalid input. Please enter 'y' or 'n'.");
     }
-} while (isUserContinuing) ;
+} while (isUserContinuing);
 
 Console.WriteLine("Task ended");

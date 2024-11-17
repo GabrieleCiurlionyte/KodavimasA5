@@ -9,12 +9,12 @@ namespace KodavimasA5.Services
         {
             var binaryVector = ConsoleWriteHelper.EnterBinaryVector(m);
             var encodedVector = Encoder.Encode(binaryVector, m);
-            Console.WriteLine(encodedVector);
+            Console.WriteLine("Encoded vector:\n" + encodedVector);
             string channelVector = Channel.SendThroughChannel(encodedVector, percentageOfMistake);
             ConsoleWriteHelper.PrintBinaryVectorMistakes(encodedVector, channelVector);
             ConsoleWriteHelper.FixBinaryVectorMistakes(encodedVector, channelVector);
             var decodedVector = Decoder.Decode(channelVector, m);
-            Console.WriteLine(decodedVector);
+            Console.WriteLine("Decoded vector:\n" + decodedVector);
         }
 
         public void ExecuteSecondScenario(int m, int percentageOfMistake)
@@ -76,11 +76,7 @@ namespace KodavimasA5.Services
 
         public void ExecuteThirdScenario(int m, int percentageOfMistake)
         {
-
-            //TODO: change to relative path
-
-            // Specify the full path to BMPApp.exe
-            string fullPath = @"C:\Users\gabrc\source\repos\KodavimasA5\BMPApp\bin\Debug\net8.0-windows\BMPApp.exe";
+            string fullPath = GetBMPViewerPath();
 
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
@@ -95,6 +91,16 @@ namespace KodavimasA5.Services
                 Console.WriteLine("Close the BMP Image Viewer window, to return to new scenario selection");
                 process.WaitForExit();
             }
+        }
+
+        private string GetBMPViewerPath()
+        {
+            // Construct the relative path to BMPApp.exe
+            string relativePath = @"..\..\..\..\BMPApp\bin\Debug\net8.0-windows\BMPApp.exe";
+
+            string fullPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), relativePath));
+
+            return fullPath;
         }
     }
 }

@@ -172,50 +172,57 @@ namespace KodavimasA5.Helpers
             return input.All(c => c == '0' || c == '1');
         }
 
-        
 
-        public static string FixBinaryVectorMistakes(string inputVector, string channelVector) 
+
+        public static string FixBinaryVectorMistakes(string inputVector, string channelVector)
         {
-            var mistakeIndexes = GetMistakeIndexes(inputVector , channelVector);
+            var mistakeIndexes = GetMistakeIndexes(inputVector, channelVector);
 
-            Console.WriteLine("Do you want to fix vector: enter 'y' if yes, 'n' - if no.");
+            while (mistakeIndexes.Count > 0)
+            {
+                Console.WriteLine("Do you want to fix a mistake? Enter 'y' for yes or 'n' for no:");
+                var cleanedInput = GetCleanedUpInput();
 
-            var validInput = false;
-            var cleanedInput = GetCleanedUpInput();
-
-            while (!validInput || !(mistakeIndexes.Count == 0)) {
-                if (cleanedInput == "y" || cleanedInput == "n")
+                switch (cleanedInput)
                 {
-                    if (cleanedInput == "n")
-                    {
-                        validInput = true;
+                    case "n":
                         return channelVector;
-                    }
-                    else
-                    {
-                        var index = int.Parse(GetCleanedUpInput());
-                        if (CheckIfIndexBelongsToIndexList(index, mistakeIndexes))
-                        {
-                            validInput = true;
-                            var fixedChannel = ReplaceIndex(index, channelVector);
-                            Console.WriteLine($"Fixed index: {index}");
-                            Console.WriteLine($"Fixed vector: {fixedChannel}");
-                            PrintBinaryVectorMistakes(inputVector, fixedChannel);
-                            return fixedChannel;
-                        }
-                        else {
-                            Console.WriteLine("Inputted vector is not correct.");
-                        }
 
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Invalid input. Please enter 'y' or 'n'.");
+                    case "y":
+                        if (TryFixIndex(ref channelVector, mistakeIndexes, inputVector))
+                        {
+                            mistakeIndexes = GetMistakeIndexes(inputVector, channelVector);
+                        }
+                        break;
+
+                    default:
+                        Console.WriteLine("Invalid input. Please enter 'y' or 'n'.");
+                        break;
                 }
             }
 
+            Console.WriteLine("No more mistakes to fix.");
             return channelVector;
+        }
+
+        private static bool TryFixIndex(ref string channelVector, List<int> mistakeIndexes, string inputVector)
+        {
+            Console.WriteLine("Enter the index to fix:");
+            var indexInput = GetCleanedUpInput();
+
+            if (int.TryParse(indexInput, out int index) && mistakeIndexes.Contains(index))
+            {
+                channelVector = ReplaceIndex(index, channelVector);
+                Console.WriteLine($"Fixed index: {index}");
+                Console.WriteLine($"Fixed vector: {channelVector}");
+                PrintBinaryVectorMistakes(inputVector, channelVector);
+                return true;
+            }
+            else
+            {
+                Console.WriteLine(mistakeIndexes.Contains(index) ? "Invalid index input. Please enter a valid integer." : "The index entered does not correspond to a mistake.");
+                return false;
+            }
         }
 
         private static string ReplaceIndex(int index, string channelVector) 
