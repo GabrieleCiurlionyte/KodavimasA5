@@ -1,4 +1,5 @@
 ﻿using KodavimasA5;
+using KodavimasA5.Helpers;
 
 namespace BMPApp.Helpers
 {
@@ -29,17 +30,19 @@ namespace BMPApp.Helpers
             // Extract and retain header data
             var header = binaryString.Substring(0, _bmpHeaderSize * 8); // Assuming 8 bits per byte for header
             var imageData = binaryString.Substring(_bmpHeaderSize * 8);
+            var imageDataWithAdditionalZeroes = ValidatorHelper.AddAdditionBitsIfNeeded(imageData, m);
 
             // Encode only the image data
-            var encodedBinaryString = Encoder.Encode(imageData, m);
+            var encodedBinaryString = Encoder.Encode(imageDataWithAdditionalZeroes, m);
 
             var channelOutputWithEncoding = Channel.SendThroughChannel(encodedBinaryString, percentageOfMistake, _bmpHeaderSize);
 
             // Decode the received data
-            var decodedBinaryInput = Decoder.Decode(_random, channelOutputWithEncoding, m);
+            var decodedBinaryInputWithAdditionalZeroes = Decoder.Decode(_random, channelOutputWithEncoding, m);
+            var decodedBinary = ValidatorHelper.RemoveAdditionalBitsIfNeeded(imageData, decodedBinaryInputWithAdditionalZeroes, m);
 
             // Reassemble the binary string with the original header
-            var completeBinaryString = header + decodedBinaryInput;
+            var completeBinaryString = header + decodedBinary;
 
             return ImageHelper.ConvertBinaryToImage(completeBinaryString);
         }

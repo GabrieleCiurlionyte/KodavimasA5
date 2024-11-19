@@ -50,10 +50,6 @@ namespace BMPApp
         {
             Image image = Image.FromFile(filePath);
 
-            if (!ImageHelper.isImageLengthValid(image, m))
-            {
-                return;
-            }
             uiHelper.PictureBoxOriginalImage.Image = image;
             originalImage = image;
         }

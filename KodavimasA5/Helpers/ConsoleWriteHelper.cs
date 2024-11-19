@@ -156,7 +156,8 @@ namespace KodavimasA5.Helpers
                         isInputCorrect = true;
                     }
                     else {
-                        Console.WriteLine("Invalid input. Binary string length is incorrect.");
+                        Console.WriteLine("Invalid input. We will add additional '0' bits while coding and decoding");
+                        isInputCorrect = true;
                     }
                 }
                 else

@@ -14,18 +14,22 @@ namespace KodavimasA5.Services
         public void ExecuteFirstScenario(int m, int percentageOfMistake) 
         {
             var binaryVector = ConsoleWriteHelper.EnterBinaryVector(m);
-            var encodedVector = Encoder.Encode(binaryVector, m);
+            var binaryVectorWithAdditionalZeroes = ValidatorHelper.AddAdditionBitsIfNeeded(binaryVector, m);
+
+            var encodedVector = Encoder.Encode(binaryVectorWithAdditionalZeroes, m);
             Console.WriteLine("Encoded vector:\n" + encodedVector);
             string channelVector = Channel.SendThroughChannel(encodedVector, percentageOfMistake);
             ConsoleWriteHelper.PrintBinaryVectorMistakes(encodedVector, channelVector);
             ConsoleWriteHelper.FixBinaryVectorMistakes(encodedVector, channelVector);
             var decodedVector = Decoder.Decode(_random, channelVector, m);
+
+            decodedVector = ValidatorHelper.RemoveAdditionalBitsIfNeeded(binaryVector, decodedVector, m);
             Console.WriteLine("Decoded vector:\n" + decodedVector);
         }
 
         public void ExecuteSecondScenario(int m, int percentageOfMistake)
         {
-            var input = GetInputText(m);
+            var input = ConsoleWriteHelper.InputUserText();
             if (input == null) {
                 return;
             }
@@ -34,20 +38,9 @@ namespace KodavimasA5.Services
             ExecuteSecondScenarioPart2(m, percentageOfMistake, input);
         }
 
-        private static string? GetInputText(int m) 
-        {
-            var input = ConsoleWriteHelper.InputUserText();
-            if (!ValidatorHelper.IsStringVectorLengthCorrect(input, m))
-            {
-                Console.WriteLine("The input is not correct length");
-                return null;
-            }
-            return input;
-        }
-
         private static void ExecuteSecondScenarioPart1(int m, int percentageOfMistake, string input)
         {
-            Console.WriteLine("Sending text without encoding to channel....");
+            Console.WriteLine("\nSCENARIO 2 PART 1\n Sending text without encoding to channel....");
 
             //Conversion to binary
             var binaryInput = ConversionHelper.ConvertStringToBinary(input);
@@ -64,17 +57,21 @@ namespace KodavimasA5.Services
 
         private static void ExecuteSecondScenarioPart2(int m, int percentageOfMistake, string input)
         {
-            Console.WriteLine("Sending text with encoding to channel....");
+            Console.WriteLine("\n SCENARIO 2 PART 2\n Sending text with encoding to channel....");
             var binaryInput = ConversionHelper.ConvertStringToBinary(input);
-            if (ValidatorHelper.IsBinaryVectorLengthCorrect(input, m)) {
-                Console.WriteLine("Incorrect length");
+
+            if (!ValidatorHelper.IsBinaryVectorLengthCorrect(input, m))
+            {
+                Console.WriteLine("Incorrect length, we will add additional '0' bits for encoding and decoding");
             }
 
-            var encodedVector = Encoder.Encode(binaryInput, m);
-            var channelInputWithEncoding = Channel.SendThroughChannel(encodedVector, percentageOfMistake);
-            var decodedVector = Decoder.Decode(_random, channelInputWithEncoding, m);
-            var decodedString = ConversionHelper.ConvertBinaryToString(decodedVector);
+            var binaryStringWithAdditionalZeroes = ValidatorHelper.AddAdditionBitsIfNeeded(binaryInput, m);
+            var encodedVector = Encoder.Encode(binaryStringWithAdditionalZeroes, m);
+            var channelOutputWithEncoding = Channel.SendThroughChannel(encodedVector, percentageOfMistake);
+            var decodedVector = Decoder.Decode(_random, channelOutputWithEncoding, m);
+            decodedVector = ValidatorHelper.RemoveAdditionalBitsIfNeeded(binaryInput, decodedVector, m);
 
+            var decodedString = ConversionHelper.ConvertBinaryToString(decodedVector);
             Console.WriteLine("Result with encoding");
             Console.WriteLine(decodedString);
         }

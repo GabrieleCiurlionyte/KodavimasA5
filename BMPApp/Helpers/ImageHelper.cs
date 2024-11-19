@@ -40,18 +40,5 @@ namespace BMPApp.Helpers
                 return (Image)image.Clone();
             }
         }
-
-        public static bool isImageLengthValid(Image image, int m)
-        {
-            var binaryVector = ConvertImageToBinary(image);
-
-            if (!ValidatorHelper.IsBinaryVectorLengthCorrect(binaryVector, m))
-            {
-                MessageBox.Show("Input image cannot be encoded because of incorrect length.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-
-            return true;
-        }
     }
 }
