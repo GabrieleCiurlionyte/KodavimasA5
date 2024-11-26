@@ -11,7 +11,7 @@ namespace KodavimasA5.Services
             _random = random;
         }
 
-        public void ExecuteFirstScenario(int m, int percentageOfMistake) 
+        public void ExecuteFirstScenario(int m, double percentageOfMistake) 
         {
             var binaryVector = ConsoleWriteHelper.EnterBinaryVector(m);
             var binaryVectorWithAdditionalZeroes = ValidatorHelper.AddAdditionBitsIfNeeded(binaryVector, m);
@@ -20,14 +20,14 @@ namespace KodavimasA5.Services
             Console.WriteLine("Encoded vector:\n" + encodedVector);
             string channelVector = Channel.SendThroughChannel(encodedVector, percentageOfMistake);
             ConsoleWriteHelper.PrintBinaryVectorMistakes(encodedVector, channelVector);
-            ConsoleWriteHelper.FixBinaryVectorMistakes(encodedVector, channelVector);
-            var decodedVector = Decoder.Decode(_random, channelVector, m);
+            var fixedVector = ConsoleWriteHelper.FixBinaryVectorMistakes(encodedVector, channelVector);
+            var decodedVector = Decoder.Decode(_random, fixedVector, m);
 
             decodedVector = ValidatorHelper.RemoveAdditionalBitsIfNeeded(binaryVector, decodedVector, m);
             Console.WriteLine("Decoded vector:\n" + decodedVector);
         }
 
-        public void ExecuteSecondScenario(int m, int percentageOfMistake)
+        public void ExecuteSecondScenario(int m, double percentageOfMistake)
         {
             var input = ConsoleWriteHelper.InputUserText();
             if (input == null) {
@@ -38,7 +38,7 @@ namespace KodavimasA5.Services
             ExecuteSecondScenarioPart2(m, percentageOfMistake, input);
         }
 
-        private static void ExecuteSecondScenarioPart1(int m, int percentageOfMistake, string input)
+        private static void ExecuteSecondScenarioPart1(int m, double percentageOfMistake, string input)
         {
             Console.WriteLine("\nSCENARIO 2 PART 1\n Sending text without encoding to channel....");
 
@@ -55,7 +55,7 @@ namespace KodavimasA5.Services
             Console.WriteLine(stringReceivedFromChannel);
         }
 
-        private static void ExecuteSecondScenarioPart2(int m, int percentageOfMistake, string input)
+        private static void ExecuteSecondScenarioPart2(int m, double percentageOfMistake, string input)
         {
             Console.WriteLine("\n SCENARIO 2 PART 2\n Sending text with encoding to channel....");
             var binaryInput = ConversionHelper.ConvertStringToBinary(input);
@@ -76,7 +76,7 @@ namespace KodavimasA5.Services
             Console.WriteLine(decodedString);
         }
 
-        public void ExecuteThirdScenario(int m, int percentageOfMistake)
+        public void ExecuteThirdScenario(int m, double percentageOfMistake)
         {
             string fullPath = GetBMPViewerPath();
 

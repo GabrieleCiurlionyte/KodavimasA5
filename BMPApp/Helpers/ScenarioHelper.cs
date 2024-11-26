@@ -8,7 +8,7 @@ namespace BMPApp.Helpers
         private static int _bmpHeaderSize = 54;
         private static Random _random = new Random();
 
-        public static Image? SendImageWithoutEncoding(Image imageInput, int m, int percentageOfMistake)
+        public static Image? SendImageWithoutEncoding(Image imageInput, int m, double percentageOfMistake)
         {
             //Convert image to binary
             var binaryString = ImageHelper.ConvertImageToBinary(imageInput);
@@ -22,7 +22,7 @@ namespace BMPApp.Helpers
             return imageReceivedFromChannel;
         }
 
-        public static Image? SendImageWithEncoding(Image imageInput, int m, int percentageOfMistake)
+        public static Image? SendImageWithEncoding(Image imageInput, int m, double percentageOfMistake)
         {
 
             var binaryString = ImageHelper.ConvertImageToBinary(imageInput);

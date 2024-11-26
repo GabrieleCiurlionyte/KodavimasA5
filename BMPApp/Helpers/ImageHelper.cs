@@ -1,6 +1,4 @@
-﻿using KodavimasA5.Helpers;
-
-namespace BMPApp.Helpers
+﻿namespace BMPApp.Helpers
 {
     public static class ImageHelper
     {

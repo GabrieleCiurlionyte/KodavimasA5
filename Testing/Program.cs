@@ -50,7 +50,7 @@ public class Program
         }
     }
 
-    private static void ExecuteDecodeTest(int m, int percentageOfMistake, string input)
+    private static void ExecuteDecodeTest(int m, double percentageOfMistake, string input)
     {
         var encodedVector = Encoder.Encode(input, m);
         string channelVector = Channel.SendThroughChannel(encodedVector, percentageOfMistake);

@@ -4,7 +4,7 @@
     {
         private static readonly Random random = new Random();
 
-        public static string SendThroughChannel(string input, int percentageOfMistake, int headerSize = 0)
+        public static string SendThroughChannel(string input, double percentageOfMistake, int headerSize = 0)
         {
             char[] result = input.ToCharArray();
 
@@ -12,7 +12,7 @@
             for (int i = headerSize * 8; i < result.Length; i++)
             {
                 // Simulate mistakes in pixel data only
-                if (random.Next(100) < percentageOfMistake)
+                if (random.NextDouble() < percentageOfMistake)
                 {
                     result[i] = result[i] == '0' ? '1' : '0';
                 }

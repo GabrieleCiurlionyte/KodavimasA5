@@ -7,9 +7,9 @@ namespace BMPApp
         private UIHelper uiHelper;
         private Image originalImage;
         public int m;
-        public int percentageOfMistake;
+        public double percentageOfMistake;
 
-        public MainForm(int m, int percentageOfMistake)
+        public MainForm(int m, double percentageOfMistake)
         {
             this.m = m;
             this.percentageOfMistake = percentageOfMistake;
@@ -54,7 +54,7 @@ namespace BMPApp
             originalImage = image;
         }
 
-        private async Task ShowNotEncodedImageAsync(int m, int percentageOfMistake)
+        private async Task ShowNotEncodedImageAsync(int m, double percentageOfMistake)
         {
             uiHelper.PictureBoxNotEncodedImage.Image = uiHelper.CreateLoadingImage(uiHelper.PictureBoxNotEncodedImage.Width, uiHelper.PictureBoxNotEncodedImage.Height);
             uiHelper.PictureBoxNotEncodedImage.Refresh();
@@ -71,7 +71,7 @@ namespace BMPApp
             }
         }
 
-        private async Task ShowEncodedImageAsync(int m, int percentageOfMistake)
+        private async Task ShowEncodedImageAsync(int m, double percentageOfMistake)
         {
             uiHelper.PictureBoxEncodedImage.Image = uiHelper.CreateLoadingImage(uiHelper.PictureBoxEncodedImage.Width, uiHelper.PictureBoxEncodedImage.Height);
             uiHelper.PictureBoxEncodedImage.Refresh();
@@ -95,13 +95,13 @@ namespace BMPApp
             Application.SetCompatibleTextRenderingDefault(false);
 
             int m = 3; // Default values
-            int percentageOfMistake = 5;
+            double percentageOfMistake = 0.5;
 
             // Parse command-line arguments if provided
             if (args.Length >= 2)
             {
                 int.TryParse(args[0], out m);
-                int.TryParse(args[1], out percentageOfMistake);
+                double.TryParse(args[1], out percentageOfMistake);
             }
 
             Application.Run(new MainForm(m, percentageOfMistake));
