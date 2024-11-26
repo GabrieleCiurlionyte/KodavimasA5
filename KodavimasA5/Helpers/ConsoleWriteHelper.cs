@@ -207,7 +207,7 @@ namespace KodavimasA5.Helpers
 
             while (continueFixing)
             {
-                Console.WriteLine("Enter the index to change. These are the available indexes: ");
+                Console.WriteLine("Enter the index to change: ");
                 var indexInput = GetCleanedUpInput();
 
                 if (int.TryParse(indexInput, out int index) && stringIndexes.Contains(index))
